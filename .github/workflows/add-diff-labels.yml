@@ -24,6 +24,7 @@ jobs:
         id: file_list
         run: |
           FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD)
+          echo ${{ github.event.pull_request.base.ref }}
           echo "FILES=$FILES" >> $GITHUB_OUTPUT
 
       - name: Search for get_blob_db in modified files
@@ -31,7 +32,7 @@ jobs:
         run: |
           FOUND=false
           for file in ${{ steps.file_list.outputs.FILES }}; do
-            if [[ -f "$file" ]] && grep -q "get_blob_db" "$file"; then
+            if [[ -f "$file" ]] && grep -q "test on staging" "$file"; then
               FOUND=true
               break
             fi
