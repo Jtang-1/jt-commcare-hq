@@ -3,6 +3,8 @@ name: Label PR if get_blob_db is used
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created, edited]
 
 jobs:
   label-if-get-blob-db-used:
