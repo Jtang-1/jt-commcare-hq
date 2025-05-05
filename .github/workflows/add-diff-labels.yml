@@ -32,7 +32,7 @@ jobs:
         run: |
           FOUND=false
           for file in ${{ steps.file_list.outputs.FILES }}; do
-            if [[ -f "$file" ]] && grep -q "test on staging" "$file"; then
+            if [[ -f "$file" ]] && grep -q "get_blob_db" "$file"; then
               FOUND=true
               break
             fi
@@ -42,7 +42,7 @@ jobs:
       - name: Add label to PR if found
         if: steps.grep_check.outputs.FOUND == 'true'
         run: |
-          gh pr edit "$PR_URL" --add-label "blob-db-usage"
+          gh pr edit "$PR_URL" --add-label "test on staging"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
