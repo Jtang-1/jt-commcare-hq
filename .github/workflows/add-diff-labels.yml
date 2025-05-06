@@ -3,8 +3,6 @@ name: Label PR if get_blob_db is used
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  issue_comment:
-    types: [created, edited]
 
 jobs:
   label-if-get-blob-db-used:
@@ -44,11 +42,18 @@ jobs:
 
           echo "FOUND=$FOUND" >> $GITHUB_OUTPUT
 
-
       - name: Add label to PR if found
         if: steps.grep_check.outputs.FOUND == 'true'
         run: |
           gh pr edit "$PR_URL" --add-label "test on staging"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+      - name: Remove label if no blob-related usage is found
+        if: steps.grep_check.outputs.FOUND == 'false'
+        run: |
+          gh pr edit "$PR_URL" --remove-label "blob-db-usage"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
