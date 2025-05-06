@@ -41,6 +41,7 @@ jobs:
           PATTERN="get_blob_db|get_email_configuration"
   
           for file in $FILES; do
+            echo "$file"
             if [[ -f "$file" ]] && grep -Eq "$PATTERN" "$file"; then
               FOUND=true
               break
