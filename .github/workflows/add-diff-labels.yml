@@ -53,7 +53,7 @@ jobs:
       - name: Remove label if no blob-related usage is found
         if: steps.grep_check.outputs.FOUND == 'false'
         run: |
-          gh pr edit "$PR_URL" --remove-label "blob-db-usage"
+          gh pr edit "$PR_URL" --remove-label "test on staging"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
