@@ -27,17 +27,23 @@ jobs:
           echo ${{ github.event.pull_request.base.ref }}
           echo "FILES=$FILES" >> $GITHUB_OUTPUT
 
-      - name: Search for get_blob_db in modified files
+      - name: Search for blob-related functions in modified files
         id: grep_check
         run: |
+          FILES="${{ steps.file_list.outputs.FILES }}"
           FOUND=false
-          for file in ${{ steps.file_list.outputs.FILES }}; do
-            if [[ -f "$file" ]] && grep -q "get_blob_db" "$file"; then
+      
+          PATTERN="get_blob_db|get_email_configuration"
+  
+          for file in $FILES; do
+            if [[ -f "$file" ]] && grep -Eq "$PATTERN" "$file"; then
               FOUND=true
               break
             fi
           done
+
           echo "FOUND=$FOUND" >> $GITHUB_OUTPUT
+
 
       - name: Add label to PR if found
         if: steps.grep_check.outputs.FOUND == 'true'
